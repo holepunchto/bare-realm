@@ -26,7 +26,7 @@ typeof globalThis.foo
 
 #### `realm.destroy()`
 
-#### `realm.evaluate(code[, options])`
+#### `const result = realm.evaluate(code[, options])`
 
 Options include:
 
