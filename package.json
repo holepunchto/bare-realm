@@ -1,6 +1,6 @@
 {
   "name": "bare-realm",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Realm support for Bare",
   "exports": {
     ".": "./index.js",
