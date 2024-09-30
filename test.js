@@ -3,6 +3,7 @@ const Realm = require('.')
 
 test('basic', (t) => {
   const realm = new Realm()
+  t.teardown(() => realm.destroy())
 
   const globalThat = realm.evaluate('globalThis')
 
