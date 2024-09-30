@@ -8,6 +8,13 @@ typedef struct {
   js_context_t *context;
 } bare_realm_t;
 
+static void
+on_realm_finalize (js_env_t *env, void *data, void *finalize_hint) {
+  bare_realm_t *realm = data;
+
+  js_destroy_context(env, realm->context);
+}
+
 static js_value_t *
 bare_realm_create (js_env_t *env, js_callback_info_t *info) {
   int err;
@@ -20,6 +27,9 @@ bare_realm_create (js_env_t *env, js_callback_info_t *info) {
 
   err = js_create_context(env, &realm->context);
   if (err < 0) return NULL;
+
+  err = js_add_finalizer(env, handle, (void *) realm, on_realm_finalize, NULL, NULL);
+  assert(err == 0);
 
   return handle;
 }
