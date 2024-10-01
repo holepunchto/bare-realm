@@ -10,13 +10,15 @@ typedef struct {
 } bare_realm_t;
 
 static void
-on_realm_finalize (js_env_t *env, void *data, void *finalize_hint) {
+bare_realm__on_finalize (js_env_t *env, void *data, void *finalize_hint) {
   bare_realm_t *realm = data;
 
   if (realm->is_destroyed) return;
 
   int err = js_destroy_context(env, realm->context);
-  if (err == 0) realm->is_destroyed = true;
+  assert(err == 0);
+
+  realm->is_destroyed = true;
 }
 
 static js_value_t *
@@ -34,7 +36,7 @@ bare_realm_create (js_env_t *env, js_callback_info_t *info) {
 
   realm->is_destroyed = false;
 
-  err = js_add_finalizer(env, handle, (void *) realm, on_realm_finalize, NULL, NULL);
+  err = js_add_finalizer(env, handle, (void *) realm, bare_realm__on_finalize, NULL, NULL);
   assert(err == 0);
 
   return handle;
@@ -56,7 +58,7 @@ bare_realm_destroy (js_env_t *env, js_callback_info_t *info) {
   err = js_get_arraybuffer_info(env, argv[0], (void **) &realm, NULL);
   assert(err == 0);
 
-  on_realm_finalize(env, realm, NULL);
+  bare_realm__on_finalize(env, realm, NULL);
 
   return NULL;
 }
