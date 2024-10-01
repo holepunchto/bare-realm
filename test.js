@@ -1,7 +1,7 @@
 const test = require('brittle')
 const Realm = require('.')
 
-test('basic', async (t) => {
+test('basic', (t) => {
   const realm = new Realm()
   t.teardown(() => realm.destroy())
 
