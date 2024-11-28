@@ -4,63 +4,29 @@
 #include <stdint.h>
 #include <stdlib.h>
 
-typedef struct {
-  js_context_t *context;
-  bool is_destroyed;
-} bare_realm_t;
+typedef js_context_t bare_realm_t;
 
 static void
 bare_realm__on_finalize (js_env_t *env, void *data, void *finalize_hint) {
-  bare_realm_t *realm = data;
+  bare_realm_t *realm = (bare_realm_t *) data;
 
-  if (realm->is_destroyed) return;
-
-  int err = js_destroy_context(env, realm->context);
+  int err = js_destroy_context(env, realm);
   assert(err == 0);
-
-  realm->is_destroyed = true;
 }
 
 static js_value_t *
 bare_realm_create (js_env_t *env, js_callback_info_t *info) {
   int err;
 
-  js_value_t *handle;
-
   bare_realm_t *realm;
-  err = js_create_arraybuffer(env, sizeof(bare_realm_t), (void **) &realm, &handle);
-  assert(err == 0);
-
-  err = js_create_context(env, &realm->context);
+  err = js_create_context(env, &realm);
   if (err < 0) return NULL;
 
-  realm->is_destroyed = false;
-
-  err = js_add_finalizer(env, handle, (void *) realm, bare_realm__on_finalize, NULL, NULL);
+  js_value_t *handle;
+  err = js_create_external(env, (void *) realm, bare_realm__on_finalize, NULL, &handle);
   assert(err == 0);
 
   return handle;
-}
-
-static js_value_t *
-bare_realm_destroy (js_env_t *env, js_callback_info_t *info) {
-  int err;
-
-  size_t argc = 1;
-  js_value_t *argv[1];
-
-  err = js_get_callback_info(env, info, &argc, argv, NULL, NULL);
-  assert(err == 0);
-
-  assert(argc == 1);
-
-  bare_realm_t *realm;
-  err = js_get_arraybuffer_info(env, argv[0], (void **) &realm, NULL);
-  assert(err == 0);
-
-  bare_realm__on_finalize(env, realm, NULL);
-
-  return NULL;
 }
 
 static js_value_t *
@@ -76,7 +42,7 @@ bare_realm_evaluate (js_env_t *env, js_callback_info_t *info) {
   assert(argc == 4);
 
   bare_realm_t *realm;
-  err = js_get_arraybuffer_info(env, argv[0], (void **) &realm, NULL);
+  err = js_get_value_external(env, argv[0], (void **) &realm);
   assert(err == 0);
 
   js_value_t *source = argv[1];
@@ -95,7 +61,7 @@ bare_realm_evaluate (js_env_t *env, js_callback_info_t *info) {
   err = js_get_value_int32(env, argv[3], &offset);
   assert(err == 0);
 
-  err = js_enter_context(env, realm->context);
+  err = js_enter_context(env, realm);
   assert(err == 0);
 
   js_value_t *result;
@@ -104,7 +70,7 @@ bare_realm_evaluate (js_env_t *env, js_callback_info_t *info) {
 
   free(file);
 
-  err = js_exit_context(env, realm->context);
+  err = js_exit_context(env, realm);
   assert(err == 0);
 
   return result;
@@ -124,7 +90,6 @@ bare_realm_exports (js_env_t *env, js_value_t *exports) {
   }
 
   V("create", bare_realm_create)
-  V("destroy", bare_realm_destroy)
   V("evaluate", bare_realm_evaluate)
 #undef V
 

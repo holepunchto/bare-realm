@@ -7,10 +7,6 @@ module.exports = class Realm {
   }
 
   destroy() {
-    if (this._handle === null) return
-
-    binding.destroy(this._handle)
-
     this._handle = null
   }
 
