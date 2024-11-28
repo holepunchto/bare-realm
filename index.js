@@ -2,11 +2,11 @@ const binding = require('./binding')
 const errors = require('./lib/errors')
 
 module.exports = class Realm {
-  constructor () {
+  constructor() {
     this._handle = binding.create()
   }
 
-  destroy () {
+  destroy() {
     if (this._handle === null) return
 
     binding.destroy(this._handle)
@@ -14,13 +14,10 @@ module.exports = class Realm {
     this._handle = null
   }
 
-  evaluate (code, opts = {}) {
+  evaluate(code, opts = {}) {
     if (this._handle === null) throw errors.REALM_DESTROYED()
 
-    const {
-      filename = '<anonymous>',
-      offset = 0
-    } = opts
+    const { filename = '<anonymous>', offset = 0 } = opts
 
     return binding.evaluate(this._handle, code, filename, offset)
   }

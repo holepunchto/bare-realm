@@ -35,7 +35,7 @@ Options include:
   filename: '<anonymous>',
   offset: 0
 }
-````
+```
 
 ## License
 
