@@ -1,7 +1,16 @@
-declare class Realm {
-  evaluate(code: string, opts?: { filename: string; offset: number }): any
+interface EvaluateOptions {
+  filename?: string
+  offset?: number
+}
 
-  destroy(): void
+interface Realm {
+  evaluate(code: string, options?: EvaluateOptions): any
+}
+
+declare class Realm {}
+
+declare namespace Realm {
+  export type { EvaluateOptions }
 }
 
 export = Realm

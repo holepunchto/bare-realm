@@ -3,12 +3,11 @@
   "version": "1.0.8",
   "description": "Realm support for Bare",
   "exports": {
+    "./package": "./package.json",
     ".": {
       "types": "./index.d.ts",
       "default": "./index.js"
-    },
-    "./package": "./package.json",
-    "./errors": "./lib/errors.js"
+    }
   },
   "files": [
     "index.js",
@@ -16,7 +15,6 @@
     "binding.c",
     "binding.js",
     "CMakeLists.txt",
-    "lib",
     "prebuilds"
   ],
   "addon": true,
