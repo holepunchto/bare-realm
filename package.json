@@ -1,6 +1,6 @@
 {
   "name": "bare-realm",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Realm support for Bare",
   "exports": {
     "./package": "./package.json",
