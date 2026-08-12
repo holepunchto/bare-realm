@@ -22,7 +22,7 @@ typeof globalThis.foo
 
 ## API
 
-See the [full API reference](https://docs.pears.com/reference/bare/modules/bare-realm).
+See the [`bare-realm` reference](https://docs.pears.com/reference/bare/modules/bare-realm).
 
 ## License
 
