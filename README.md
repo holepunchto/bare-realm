@@ -22,20 +22,7 @@ typeof globalThis.foo
 
 ## API
 
-#### `const realm = new Realm()`
-
-#### `realm.destroy()`
-
-#### `const result = realm.evaluate(code[, options])`
-
-Options include:
-
-```js
-{
-  filename: '<anonymous>',
-  offset: 0
-}
-```
+See the [`bare-realm` reference](https://docs.pears.com/reference/bare/modules/bare-realm).
 
 ## License
 
