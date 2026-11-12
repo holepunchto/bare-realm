@@ -10,4 +10,12 @@ module.exports = class Realm {
 
     return binding.evaluate(this._handle, code, filename, offset)
   }
+
+  static globalOf(value) {
+    return binding.globalOf(value)
+  }
+
+  static isFrom(value, global) {
+    return binding.isFrom(value, global)
+  }
 }
