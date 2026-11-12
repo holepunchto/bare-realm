@@ -34,7 +34,7 @@
   },
   "homepage": "https://github.com/holepunchto/bare-realm#readme",
   "engines": {
-    "bare": ">=1.5.0"
+    "bare": ">=1.37.0"
   },
   "devDependencies": {
     "brittle": "^3.3.2",
