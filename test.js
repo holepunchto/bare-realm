@@ -44,3 +44,13 @@ test('isFrom from optimized code', (t) => {
 
   t.is(matches, Math.ceil(1e6 / 3))
 })
+
+test('evaluate names the script in stack traces', (t) => {
+  const realm = new Realm()
+
+  t.ok(
+    realm
+      .evaluate('new Error().stack', { filename: 'script.js', offset: 10 })
+      .includes('at script.js:11:')
+  )
+})

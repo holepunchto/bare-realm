@@ -51,10 +51,8 @@ bare_realm_evaluate(js_env_t *env, js_callback_info_t *info) {
   err = js_get_value_string_utf8(env, argv[2], NULL, 0, &len);
   assert(err == 0);
 
-  len += 1 /* NULL */;
-
-  utf8_t *file = malloc(len);
-  err = js_get_value_string_utf8(env, argv[2], file, len, NULL);
+  utf8_t *file = malloc(len + 1 /* NULL */);
+  err = js_get_value_string_utf8(env, argv[2], file, len + 1, NULL);
   assert(err == 0);
 
   int32_t offset;
